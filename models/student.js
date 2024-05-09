@@ -14,8 +14,9 @@ module.exports = (sequelize, DataTypes) => {
 
     // Student.sync() is called to create/update the Student table in the DB
     // force: true - always update every time the app restarts
+    // force: false - DB not deleted everytime server restarts
     // returns a promise
-    Student.sync({ force: true }).then( () => {
+    Student.sync({ force: false }).then( () => {
         console.log('Synced student table')
     })
 

@@ -11,9 +11,10 @@ router.get('/students', function(req, res, next) {
 })
 
 router.post('/students', (req, res, next) => {
-    const newStudent = req.body
+    const newStudent = req.body  // student data will be in the body of the request
+    // use student data from req to create and store new Student in the DB - returns a promise
     Student.create(newStudent).then( result => {
-        return res.status(201).send('New student created!')
+        return res.status(201).send('New student created!')  // 201 = successfully created
     })
 })
 
