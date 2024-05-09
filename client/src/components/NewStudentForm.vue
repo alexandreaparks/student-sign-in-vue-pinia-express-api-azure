@@ -1,7 +1,8 @@
 <script setup>
 
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import { useStudentStore } from '../stores/StudentStore.js'
+import {storeToRefs} from "pinia";
 
 const studentStore = useStudentStore()  // reference store to use for adding a new student
 
@@ -9,6 +10,14 @@ const newStudentName = ref('')
 const newStarID = ref('')
 
 const errors = ref([])
+
+const { addNewStudentErrors } = storeToRefs(studentStore)
+
+watch( addNewStudentErrors, () => {
+  if (addNewStudentErrors.value) {
+    alert(addNewStudentErrors.value.join('\n'))
+  }
+})
 
 function addStudent() {
 
