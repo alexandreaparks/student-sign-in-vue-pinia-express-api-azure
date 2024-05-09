@@ -29,15 +29,20 @@ export const useStudentStore = defineStore('students', () => {
         })
     }
 
+    // makes DELETE request to API, then updates student list to reflect changes
     function deleteStudent(studentToDelete) {
-
+        const deleteStudentAPI = mande(`api/students/${studentToDelete.id}`)
+        deleteStudentAPI.delete().then( () => {
+            mostRecentStudent.value = {}  // update welcome/goodbye messages
+            getAllStudents()
+        })
     }
 
-    // makes PATCH request to API, the updates the student list to reflect changes
+    // makes PATCH request to API, then updates the student list to reflect changes
     function arrivedOrLeft (student) {
         const editStudentAPI = mande(`/api/students/${student.id}`)
         editStudentAPI.patch(student).then( () => {
-            mostRecentStudent.value = student
+            mostRecentStudent.value = student  // update welcome/goodbye messages
             getAllStudents()
         })
     }

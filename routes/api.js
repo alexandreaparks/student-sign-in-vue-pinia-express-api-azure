@@ -55,4 +55,19 @@ router.patch('/students/:id', function(req, res, next) {
     })
 })
 
+router.delete('/students/:id', function(req, res, next) {
+    const studentID = req.params.id
+    // destroy means delete rows, so delete rows where the student ID is the student to delete
+    Student.destroy({where: { id: studentID }})
+        .then( (rowsDeleted) => {
+            if (rowsDeleted === 1) {
+                return res.send('Student deleted!')
+            } else {
+                return res.status(404).send('Student not found!')
+            }
+        }).catch( err => {
+            return next(err)  // pass to error handler in server.js
+    })
+})
+
 module.exports = router
