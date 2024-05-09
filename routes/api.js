@@ -36,9 +36,23 @@ router.patch('/students/:id', function(req, res, next) {
     const studentID = req.params.id
     const updatedStudent = req.body
     console.log(studentID, updatedStudent)
-    Student.update( updatedStudent, { where: { id: studentID } }).then( () => {
-            return res.send('Student updated!')
-        })
+    Student.update( updatedStudent, { where: { id: studentID } })
+        .then( (result) => {
+            const rowsModified = result[0]
+            if (rowsModified === 1) {  // if 1 row is updated, the patch request was a success
+                return res.send('Student updated!')
+            } else {
+                return res.status(404).send('Student not found!')
+            }
+        }).catch( err => {
+            // validate and return status 400 if there are errors
+            if (err instanceof database.Sequelize.ValidationError) {
+                const messages = err.errors.map( e => e.message )
+                return res.status(400).json(messages)
+            } else {
+                return next(err)  // if other kind of error, pass to error handler in server.js
+            }
+    })
 })
 
 module.exports = router
