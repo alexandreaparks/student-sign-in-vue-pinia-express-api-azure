@@ -31,4 +31,14 @@ router.post('/students', (req, res, next) => {
     })
 })
 
+router.patch('/students/:id', function(req, res, next) {
+    // identify the student by their ID and then update the student in DB with that ID
+    const studentID = req.params.id
+    const updatedStudent = req.body
+    console.log(studentID, updatedStudent)
+    Student.update( updatedStudent, { where: { id: studentID } }).then( () => {
+            return res.send('Student updated!')
+        })
+})
+
 module.exports = router

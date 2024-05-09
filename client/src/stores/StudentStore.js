@@ -13,14 +13,14 @@ export const useStudentStore = defineStore('students', () => {
 
     // can also store functions in pinia store to be used by all components
 
-    // GET request to API - API runs a DB query and returns all the students
+    // makes GET request to API - API runs a DB query and returns all the students
     function getAllStudents() {
         studentAPI.get().then( students => {
             sortedStudents.value = students  // save the list of students returned from API in studentList
         })
     }
 
-    // POST request to API and then update studentList to reflect changes
+    // makes POST request to API and then update the student list to reflect changes
     function addNewStudent(student) {
         studentAPI.post(student).then( () => {
             getAllStudents()
@@ -33,8 +33,13 @@ export const useStudentStore = defineStore('students', () => {
 
     }
 
+    // makes PATCH request to API, the updates the student list to reflect changes
     function arrivedOrLeft (student) {
-
+        const editStudentAPI = mande(`/api/students/${student.id}`)
+        editStudentAPI.patch(student).then( () => {
+            mostRecentStudent.value = student
+            getAllStudents()
+        })
     }
 
     const studentCount = computed(() => {
