@@ -1,17 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { mande } from 'mande'
+
+const studentAPI = mande('api/students')  // create studentAPI object using mande
 
 // define store takes the name of the store and a function that has data the store uses
 export const useStudentStore = defineStore('students', () => {
 
-    const studentList = ref([
-        { name: 'Alexandrea', starID: 'yy2888bl', present: false },
-        { name: 'Zoey', starID: 'ha2601yj', present: false },
-        { name: 'Austin', starID: 'uh2654gd', present: false }
-
-    ])
+    const studentList = ref( [] )
 
     const mostRecentStudent = ref( {} )  // empty object
+
+    // function to make API call - API runs a DB query and returns all the students
+    function getAllStudents() {
+        studentAPI.get().then( students => {
+            studentList.value = students  // save the list of students returned from API in studentList
+        })
+    }
 
     // can also store functions in pinia store to be used by all components
     function addNewStudent(student) {
@@ -48,6 +53,7 @@ export const useStudentStore = defineStore('students', () => {
         addNewStudent,
         deleteStudent,
         arrivedOrLeft,
+        getAllStudents,
 
         // computed properties
         studentCount,
